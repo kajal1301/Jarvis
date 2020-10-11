@@ -16,6 +16,22 @@ engine.setProperty('voice', voices[0].id)
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
+def Increase_brightness():
+    try:
+        currrent_brightness=sbc.get_brightness()
+        increased_brightness=currrent_brightness+10
+        sbc.set_brightness(increased_brightness)
+    except Exception as e:
+        speak("sir brightness is full")
+
+def Decrease_brightness():
+    try:
+        currrent_brightness=sbc.get_brightness()
+        decreased_brightness=currrent_brightness-10
+        sbc.set_brightness(decreased_brightness)
+    except Exception as e:
+        speak("sir brightness is low")
+
 
 def wishMe():
     hour= int(datetime.datetime.now().hour)
@@ -84,4 +100,48 @@ if __name__ == "__main__":
         elif 'open android studio' in query:
             codePath= "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Android Studio"   
             os.startfile(codePath)
+         elif "increase the brightness" in query or "yes increase the brightness" in query or "increase brightness" in query:
+            Increase_brightness()
+            speak("sir should i increase the brightness or its good")
+
+        elif "decrease the brightness" in query or "yes decrease the brightness" in query or "decrease brightness" in query:
+            Decrease_brightness()
+            speak("sir should i decrease the brightness or its good")
+        elif "show battery status" in query:
+            battery=psutil.sensors_battery()
+            percent = str(battery.percent)
+            plugged=battery.power_plugged
+            #plugged = "Plugged In" if plugged else "Not Plugged In"
+            if plugged:
+                plug='plugged'
+            else:
+                plug='not plugged'
+            per = int(percent)
+            # plugged = "Plugged In" if plugged else "Not Plugged In"
+            if plugged:
+                plug = "plugged"
+            else:
+                plug = "not_plugged"
+
+            if plug == 'not_plugged' and per <= 30:
+                speak("Sir your battery is ")
+                speak(percent)
+                speak("sir please pluggin your charger because your battery is low ")
+            elif plug == 'plugged' and battery > 20:
+                speak("Sir your battery is ")
+                speak(percent)
+            elif plug == 'not_plugged' and per > 20:
+                speak("Sir your battery is ")
+                speak(percent)
+            elif plug == 'plugged' and battery <= 20:
+                speak("Sir your battery is ")
+                speak(percent)
+                speak("sir your battery is low dont remove your charger")
+            elif plug == 'plugged' and battery == 100:
+                speak("Sir your battery is ")
+                speak(percent)
+                speak("sir your battery is full please remove charger ")
+            else:
+                print(percent)
+
     #speak("Hello kajal, how are you")
